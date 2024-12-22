@@ -20,17 +20,6 @@ let snake = [
 ];
 
 
-
-//add the snake to the scene
-snake.forEach((s) => {
-    k.add([
-        k.pos(s.x * cellsize, s.y * cellsize),
-        k.rect(cellsize, cellsize),
-        k.color(52, 235, 103),
-        "snakepart"
-    ]);
-});
-
 //Move the snake
 (function move() {
     let head = { ...snake[0] };
@@ -48,26 +37,53 @@ snake.forEach((s) => {
         head.y++;
     }
 
-    k.get("snakepart").forEach((s) => {
-        console.log(s.pos.x);
-        const pos = s.pos;
-        s.destroy();
-        CreateSnakePart(pos.x +speed, pos.y);
+    //Add new head
+    snake.unshift(head);
 
-    });
+    //Remove tail
+    snake.pop();
+
+    Drawsnake();
 
     setTimeout(move, 1000);
+
 })();
 
 k.onUpdate(() => {
     
 
 });
-function CreateSnakePart(x, y) {
-    k.add([
-        k.pos(x, y),
-        k.rect(cellsize, cellsize),
-        k.color(52, 235, 103),
-        "snakepart"
-    ]);
+
+//On keydown
+k.onKeyPress("left", () => {
+    direction = "left";
+});
+k.onKeyPress("right", () => {
+    direction = "right";
+});
+k.onKeyPress("up", () => {
+    direction = "up";
+});
+k.onKeyPress("down", () => {
+    direction = "down";
+});
+
+function Drawsnake(x, y) {
+
+    //remove old snake
+    k.get("snakepart").forEach((s) => {
+        //console.log(s.pos.x);
+        const pos = s.pos;
+        s.destroy();
+    });
+
+    //draw new snake
+    snake.forEach((s) => {
+        k.add([
+            k.pos(s.x * cellsize, s.y * cellsize),
+            k.rect(cellsize, cellsize),
+            k.color(52, 235, 103),
+            "snakepart"
+        ]);
+    });
 }
