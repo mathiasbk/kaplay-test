@@ -8,8 +8,8 @@ k.setBackground(0, 0, 0);
 const cellsize = 30;
 const speed = 5;
 
-const rows = window.height / cellsize;
-const cols = window.width / cellsize;
+const rows = window.innerHeight;
+const cols = window.innerWidth;
 
 let direction = "right";
 
@@ -152,7 +152,7 @@ function checkCollision() {
     }
 
     //checks for collision with the wall
-    if(head.x < 0 || head.x > cols || head.y < 0 || head.y > rows) {
+    if (head.x < 0 || head.x >= cols || head.y < 0 || head.y >= rows) {
         console.log("Game Over. Snake collieded with the wall");
         endGame();
     }
