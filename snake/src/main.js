@@ -1,19 +1,19 @@
 import kaplay from "kaplay";
-// import "kaplay/global"; // uncomment if you want to use without the k. prefix
 
 const k = kaplay();
 k.setBackground(0, 0, 0);
 
 //Size of each "cell" in px
-const cellsize = 30;
-const speed = 5;
+const cellsize = 80;
+const speed = 15;
 
-const rows = window.innerHeight;
-const cols = window.innerWidth;
+const rows = Math.floor(window.innerHeight);
+const cols = Math.floor(window.innerWidth);
 
 let direction = "right";
 
 let gameOver = false;
+drawGrid();
 
 let snake = [];
 
@@ -26,6 +26,8 @@ function initGame() {
         { x: 2, y: 1 },
         { x: 1, y: 1 }
     ];
+    //place 1 food.
+    placeFood();
 }
 
 //Main scene
@@ -120,7 +122,10 @@ k.scene("Gameover", () => {
 
 
 
+
 function Drawsnake() {
+
+    drawGrid();
 
     //remove old snake
     k.get("snakepart").forEach((s) => {
@@ -164,6 +169,47 @@ function endGame()
     gameOver = true;
     k.go("Gameover");
     console.log("Game Over");
+}
+
+//add a new food
+function placeFood()
+{
+
+    //Todo: check if the food is placed on the snake
+
+    const food = {
+        x: Math.floor(Math.random() * (cols / cellsize)),
+        y: Math.floor(Math.random() * (rows / cellsize))
+    };
+
+    k.add([
+        k.pos(food.x * cellsize, food.y * cellsize),
+        k.rect(cellsize, cellsize),
+        k.color(255, 0, 0),
+        "food"
+    ]);
+}
+
+// Draw the grid
+function drawGrid() {
+
+    //draw columns
+    for (let i = 0; i < cols; i += cellsize) {
+        k.add([
+            k.rect(1, rows),
+            k.pos(i, 0),
+            k.color(15, 15, 15),
+        ]);
+    }
+
+    //draw rows
+    for (let i = 0; i < rows; i += cellsize) {
+        k.add([
+            k.rect(cols, 1),
+            k.pos(0, i),
+            k.color(15, 15, 15),
+        ]);
+    }
 }
 
 k.go("Game");
