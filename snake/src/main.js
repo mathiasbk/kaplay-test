@@ -7,8 +7,8 @@ k.setBackground(0, 0, 0);
 const cellsize = 80;
 const speed = 15;
 
-const rows = Math.floor(window.innerHeight);
-const cols = Math.floor(window.innerWidth);
+const rows = Math.floor(window.innerHeight / cellsize);
+const cols = Math.floor(window.innerWidth / cellsize);
 
 let direction = "right";
 
@@ -178,8 +178,8 @@ function placeFood()
     //Todo: check if the food is placed on the snake
 
     const food = {
-        x: Math.floor(Math.random() * (cols / cellsize)),
-        y: Math.floor(Math.random() * (rows / cellsize))
+        x: Math.floor(Math.random() * cols),
+        y: Math.floor(Math.random() * rows)
     };
 
     k.add([
@@ -193,23 +193,24 @@ function placeFood()
 // Draw the grid
 function drawGrid() {
 
-    //draw columns
-    for (let i = 0; i < cols; i += cellsize) {
+     //draw columns
+     for (let i = 0; i < cols * cellsize; i += cellsize) {
         k.add([
-            k.rect(1, rows),
+            k.rect(1, rows * cellsize),
             k.pos(i, 0),
             k.color(15, 15, 15),
         ]);
     }
 
     //draw rows
-    for (let i = 0; i < rows; i += cellsize) {
+    for (let i = 0; i < rows * cellsize; i += cellsize) {
         k.add([
-            k.rect(cols, 1),
+            k.rect(cols * cellsize, 1),
             k.pos(0, i),
             k.color(15, 15, 15),
         ]);
     }
 }
+
 
 k.go("Game");
