@@ -1,13 +1,18 @@
-# Folder structure
+# Snake Game
 
-- `src` - source code for your kaplay project
-- `dist` - distribution folder, contains your index.html, built js bundle and static assets
+This is a Snake game built with the kaplay JS library.
 
+## Folder Structure
+
+- `src` - Source code for your kaplay project
+- `dist` - Distribution folder, contains your `index.html`, built JS bundle, and static assets
 
 ## Development
 
+To start a development server, run the following command:
+
 ```sh
-$ npm run dev
+npm run dev
 ```
 
 will start a dev server at http://localhost:8000
