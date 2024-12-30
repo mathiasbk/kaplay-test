@@ -5,7 +5,7 @@ k.setBackground(0, 0, 0);
 
 //Size of each "cell" in px
 const cellsize = 80;
-const speed = 15;
+const speed = 600;
 
 const rows = Math.floor(window.innerHeight / cellsize);
 const cols = Math.floor(window.innerWidth / cellsize);
@@ -16,16 +16,21 @@ let gameOver = false;
 drawGrid();
 
 let snake = [];
+let food = [];
+let score = 0;
 
 // Function to initialize the game
 function initGame() {
     direction = "right";
     gameOver = false;
+    score = 0;
+
     snake = [
         { x: 3, y: 1 },
         { x: 2, y: 1 },
         { x: 1, y: 1 }
     ];
+
     //place 1 food.
     placeFood();
 }
@@ -38,8 +43,8 @@ k.scene("Game", () => {
     initGame();
 
     //show score
-    const score = k.add([
-        text("Score: 0"),
+    const scorelabel = k.add([
+        text("Score: " + score),
         pos(24, 24),
         { value: 0 },
     ]);
@@ -52,7 +57,7 @@ k.scene("Game", () => {
 
         setTimeout(() => {
             move();
-        }, 1000);
+        }, speed);
 
         let head = { ...snake[0] };
 
@@ -69,9 +74,6 @@ k.scene("Game", () => {
             head.y++;
         }
 
-        //check if the snake collieds with itself or the wall
-        checkCollision();
-
         //Add new head
         snake.unshift(head);
 
@@ -79,6 +81,17 @@ k.scene("Game", () => {
         snake.pop();
 
         Drawsnake();
+
+        //check if the snake collieds with itself or the wall
+        checkCollision();
+
+        //check if it hits a placed food
+        eatFood();
+
+        k.onUpdate(() => {
+            scorelabel.text = "Score: " + score;
+        });
+        
     })();
 
 
@@ -121,8 +134,6 @@ k.scene("Gameover", () => {
 
 
 
-
-
 function Drawsnake() {
 
     drawGrid();
@@ -143,6 +154,7 @@ function Drawsnake() {
             "snakepart"
         ]);
     });
+    
 }
 
 function checkCollision() {
@@ -163,6 +175,29 @@ function checkCollision() {
     }
 }
 
+function eatFood() {
+    const head = { ...snake[0] };
+
+    if(head.x === food.x && head.y === food.y) {
+        //add a new part to the snake
+        snake.push({ ...snake[snake.length - 1] });
+
+        //remove the old food
+        k.get("food").forEach((f) => {
+            f.destroy();
+        });
+
+        //place a new food
+        placeFood();
+
+        //update score
+        score++;
+        k.get("scorelabel").text = score;
+
+        console.log("food hit: " + score);
+    }
+}
+
 function endGame()
 {
     gameOver = true;
@@ -173,14 +208,13 @@ function endGame()
 //add a new food
 function placeFood()
 {
-    const food = {
+    food = {
         x: Math.floor(Math.random() * cols),
         y: Math.floor(Math.random() * rows)
     };
 
 
     //Todo: check if the food is placed on the snake
-
 
     k.add([
         k.pos(food.x * cellsize, food.y * cellsize),
