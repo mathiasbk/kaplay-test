@@ -1,4 +1,4 @@
-import kaplay from "kaplay";
+import kaplay from "https://unpkg.com/kaplay@3001/dist/kaplay.mjs";
 
 const k = kaplay();
 k.setBackground(0, 0, 0);
@@ -161,7 +161,6 @@ function checkCollision() {
         console.log("Game Over. Snake collieded with the wall");
         endGame();
     }
-
 }
 
 function endGame()
@@ -174,13 +173,14 @@ function endGame()
 //add a new food
 function placeFood()
 {
-
-    //Todo: check if the food is placed on the snake
-
     const food = {
         x: Math.floor(Math.random() * cols),
         y: Math.floor(Math.random() * rows)
     };
+
+
+    //Todo: check if the food is placed on the snake
+
 
     k.add([
         k.pos(food.x * cellsize, food.y * cellsize),
