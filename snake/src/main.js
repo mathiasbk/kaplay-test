@@ -5,16 +5,18 @@ k.setBackground(0, 0, 0);
 
 //Size of each "cell" in px
 const cellsize = 80;
-const speed = 600;
-
 const rows = Math.floor(window.innerHeight / cellsize);
 const cols = Math.floor(window.innerWidth / cellsize);
+const maxspeed = 250;
+const minspeed = 600;
+const speedincrement = 50;
 
-let direction = "right";
 
-let gameOver = false;
 drawGrid();
 
+let direction = "right";
+let gameOver = false;
+let speed = minspeed;
 let snake = [];
 let food = [];
 let score = 0;
@@ -24,6 +26,7 @@ function initGame() {
     direction = "right";
     gameOver = false;
     score = 0;
+    speed = 600;
 
     snake = [
         { x: 3, y: 1 },
@@ -194,7 +197,8 @@ function eatFood() {
         score++;
         k.get("scorelabel").text = score;
 
-        console.log("food hit: " + score);
+        //increase speed
+        speed = Math.max(maxspeed, speed - speedincrement);
     }
 }
 
@@ -202,7 +206,6 @@ function endGame()
 {
     gameOver = true;
     k.go("Gameover");
-    console.log("Game Over");
 }
 
 //add a new food
